@@ -1,0 +1,51 @@
+[project]
+name = "nifty-trading-system"
+version = "0.1.0"
+description = "Algorithmic trading system for Nifty 200 with Rust Market Profile, Kelly sizing, and Zerodha-realistic simulation"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Sagar Tarar", email = "sagartarar@github.com"}]
+
+dependencies = [
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "plotly>=5.15.0",
+    "streamlit>=1.28.0",
+    "yfinance>=0.2.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+broker = ["kiteconnect>=5.0.0"]
+dev = [
+    "black>=23.0",
+    "ruff>=0.1.0",
+    "pytest>=7.0",
+    "mypy>=1.0",
+]
+rust = ["maturin>=1.5,<2.0"]
+
+[tool.maturin]
+bindings = "pyo3"
+manifest-path = "rust_mp/Cargo.toml"
+
+[tool.black]
+line-length = 100
+target-version = ["py39"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"

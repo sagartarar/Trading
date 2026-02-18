@@ -1,5 +1,8 @@
 import subprocess
+import sys
 import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+os.chdir(os.path.join(os.path.dirname(__file__), ".."))
 import logging
 import time
 
@@ -40,7 +43,7 @@ def run_backtests():
             continue
             
         cmd = [
-            "python", "backtest_minervini.py",
+            "python", "trading/strategies/minervini.py",
             "--data-dir", data_dir,
             "--suffix", suffix,
             "--output", output_file
@@ -52,7 +55,7 @@ def run_backtests():
             
             # Run Portfolio Simulation
             logging.info(f"Running Portfolio Simulation for {name}...")
-            sim_cmd = ["python", "simulate_portfolio.py", output_file]
+            sim_cmd = ["python", "scripts/simulate_portfolio.py", output_file]
             subprocess.run(sim_cmd, check=True)
             
         except subprocess.CalledProcessError as e:
@@ -69,7 +72,7 @@ def run_backtests():
             logging.warning(f"Data directory {data_dir} not found. Skipping.")
             continue
         cmd = [
-            "python", "backtest_value_area.py",
+            "python", "trading/strategies/value_area.py",
             "--data-dir", data_dir,
             "--suffix", suffix,
             "--output", output_file
@@ -77,7 +80,7 @@ def run_backtests():
         try:
             subprocess.run(cmd, check=True)
             logging.info(f"Completed {name}. Output: {output_file}")
-            sim_cmd = ["python", "simulate_portfolio.py", output_file]
+            sim_cmd = ["python", "scripts/simulate_portfolio.py", output_file]
             subprocess.run(sim_cmd, check=True)
         except subprocess.CalledProcessError as e:
             logging.error(f"Failed to run {name}: {e}")

@@ -7,13 +7,17 @@ with honest, skepticism-addressing metrics (slippage, holding time,
 max drawdown streak, median vs mean PnL).
 """
 
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+os.chdir(os.path.join(os.path.dirname(__file__), ".."))
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
-import os
 
 # ---------------------------------------------------------------------------
 # Page Config
@@ -732,7 +736,7 @@ elif view_mode == "📊 Volume Profile":
         st.sidebar.success(f"⚡ Rust engine: {len(rs_profiles)} profiles")
         use_rust = True
     except Exception:
-        from market_profile import build_daily_profiles
+        from trading.core.market_profile import build_daily_profiles
         py_profiles = build_daily_profiles(sdf)
         rs_profiles = py_profiles
         use_rust = False

@@ -1,7 +1,10 @@
 
-from backtest_engine import Backtester
-from strategies import SMACrossover, RSIReversion
+import sys
 import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
+from trading.core.backtest_engine import Backtester
+from trading.strategies.base import SMACrossover, RSIReversion
 import logging
 
 # Configure logging

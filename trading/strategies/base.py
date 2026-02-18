@@ -1,5 +1,5 @@
 
-from backtest_engine import Strategy
+from trading.core.backtest_engine import Strategy
 import pandas as pd
 import numpy as np
 

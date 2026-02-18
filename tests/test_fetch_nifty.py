@@ -1,4 +1,8 @@
-from fetch_nifty_200_data import fetch_and_save_data
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
+from scripts.fetch_nifty_200_data import fetch_and_save_data
 import logging
 
 # Configure logging to console

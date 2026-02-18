@@ -18,7 +18,7 @@ import os
 import logging
 import argparse
 from typing import Dict, List, Optional, Tuple
-from market_profile import build_daily_profiles, DailyProfile
+from trading.core.market_profile import build_daily_profiles, DailyProfile
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 

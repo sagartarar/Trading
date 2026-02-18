@@ -30,7 +30,7 @@ import argparse
 from datetime import datetime
 from typing import List, Optional, Dict
 
-from market_profile import (
+from trading.core.market_profile import (
     build_daily_profiles,
     detect_market_step,
     estimate_overnight_inventory,
