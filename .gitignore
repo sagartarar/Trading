@@ -1,8 +1,10 @@
 # Data files (too large for git)
-data/
+data/*
 !data/nifty_200_daily/
+!data/nifty_200_15min/
 *.csv
 !data/nifty_200_daily/*.csv
+!data/nifty_200_15min/*.csv
 
 # Python
 __pycache__/
