@@ -1,0 +1,21 @@
+# ═══ Data Files (too large for GitHub) ═══
+data/
+
+# ═══ Rust Build Artifacts ═══
+backtester/target/
+
+# ═══ Dashboard Generated Data ═══
+dashboard/results.json
+
+# ═══ macOS ═══
+.DS_Store
+**/.DS_Store
+
+# ═══ Node (NotebookLMTutorApp) ═══
+NotebookLMTutorApp/node_modules/
+NotebookLMTutorApp/.expo/
+
+# ═══ IDE ═══
+.vscode/
+.idea/
+NotebookLMTutorApp/

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backtester Dashboard — Dip-Buy Strategy Visualizer</title>
+    <meta name="description" content="Interactive visualization dashboard for the Rust backtesting engine running dip-buy + profit-sweep strategy across Nifty 200 stocks">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <h1>Backtester <span class="accent">Engine</span></h1>
+                </div>
+                <p class="subtitle">Dip-Buy + Profit-Sweep Strategy — Nifty 200 Universe</p>
+            </div>
+            <div class="header-right">
+                <div class="execution-badge" id="execBadge">
+                    <span class="badge-dot"></span>
+                    <span id="execTime">—</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- KPI Cards -->
+        <section class="kpi-grid" id="kpiGrid">
+            <div class="kpi-card kpi-primary">
+                <div class="kpi-label">Nifty 50 Composite XIRR</div>
+                <div class="kpi-value" id="compositeXirr">—</div>
+                <div class="kpi-sub" id="compositePortfolio">—</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Stocks Analyzed</div>
+                <div class="kpi-value" id="stocksAnalyzed">—</div>
+                <div class="kpi-sub" id="validResults">—</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Average XIRR</div>
+                <div class="kpi-value" id="avgXirr">—</div>
+                <div class="kpi-sub" id="xirrRange">—</div>
+            </div>
+            <div class="kpi-card kpi-success">
+                <div class="kpi-label">Best Performer</div>
+                <div class="kpi-value" id="bestSymbol">—</div>
+                <div class="kpi-sub" id="bestXirr">—</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Profitable Stocks</div>
+                <div class="kpi-value" id="profitableCount">—</div>
+                <div class="kpi-sub" id="profitablePct">—</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Above 10% XIRR</div>
+                <div class="kpi-value" id="above10">—</div>
+                <div class="kpi-sub" id="above15">—</div>
+            </div>
+        </section>
+
+        <!-- Strategy Config -->
+        <section class="config-bar" id="configBar">
+            <div class="config-item"><span class="config-label">Capital</span><span class="config-value" id="cfgCapital">—</span></div>
+            <div class="config-item"><span class="config-label">Lookback</span><span class="config-value" id="cfgLookback">—</span></div>
+            <div class="config-item"><span class="config-label">Dip Range</span><span class="config-value" id="cfgDipRange">—</span></div>
+            <div class="config-item"><span class="config-label">Sweep</span><span class="config-value" id="cfgSweep">—</span></div>
+            <div class="config-item"><span class="config-label">Liquid BeES</span><span class="config-value" id="cfgLiquid">—</span></div>
+            <div class="config-item"><span class="config-label">Cooldown</span><span class="config-value" id="cfgCooldown">—</span></div>
+        </section>
+
+        <!-- Charts Row -->
+        <section class="charts-row">
+            <div class="chart-card chart-wide">
+                <h2>XIRR Distribution Across All Stocks</h2>
+                <canvas id="histogramChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h2>Top 20 — XIRR Performance</h2>
+                <canvas id="top20Chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Scatter + Pie Row -->
+        <section class="charts-row">
+            <div class="chart-card chart-wide">
+                <h2>Dip Buys vs Profit Sweeps — Capital Efficiency</h2>
+                <canvas id="scatterChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h2>XIRR Tier Breakdown</h2>
+                <canvas id="tierChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Composite Detail -->
+        <section class="composite-section" id="compositeSection">
+            <h2>📊 Nifty 50 Equal-Weight Composite — Detailed Breakdown</h2>
+            <div class="composite-grid" id="compositeGrid"></div>
+        </section>
+
+        <!-- Leaderboard -->
+        <section class="leaderboard-section">
+            <div class="leaderboard-header">
+                <h2>🏆 Full Stock Leaderboard</h2>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search stocks..." autocomplete="off">
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="leaderboard-table" id="leaderboardTable">
+                    <thead>
+                        <tr>
+                            <th data-sort="rank">Rank</th>
+                            <th data-sort="symbol">Symbol</th>
+                            <th data-sort="xirr_pct">XIRR %</th>
+                            <th data-sort="final_portfolio">Portfolio ₹</th>
+                            <th data-sort="equity_value">Equity ₹</th>
+                            <th data-sort="liquid_cash">Liquid ₹</th>
+                            <th data-sort="total_dip_buys">Dip Buys</th>
+                            <th data-sort="profit_sweeps">Sweeps</th>
+                            <th data-sort="avg_trade_size">Avg Trade ₹</th>
+                            <th>Data Range</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>Built with Rust + Rayon · Data: Zerodha Kite · <span id="dataRange">—</span></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
